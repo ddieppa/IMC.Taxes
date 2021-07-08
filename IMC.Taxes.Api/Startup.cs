@@ -1,18 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Net.Mime;
-using System.Threading.Tasks;
+using IMC.Taxes.Api.Models;
 using IMC.Taxes.Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
 namespace IMC.Taxes.Api
@@ -30,13 +25,18 @@ namespace IMC.Taxes.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            var taxJarSection = Configuration.GetSection(TaxJarOptions.TaxJar);
+            services.Configure<TaxJarOptions>(taxJarSection);
+            
             services.AddHttpClient<ITaxService, TaxJarService>(client =>
             {
-                client.BaseAddress = new Uri("https://api.taxjar.com/v2/taxes");
+                var url = taxJarSection.GetValue<string>(nameof(TaxJarOptions.Url));
+                var token = taxJarSection.GetValue<string>(nameof(TaxJarOptions.Token));
+                client.BaseAddress = new Uri(url);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
-                //client.DefaultRequestHeaders.Add("Authorization", "Token token=\"5da2f821eee4035db4771edab942a4cc\"");
                 client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Token", "token=\"5da2f821eee4035db4771edab942a4cc\"");
+                    new AuthenticationHeaderValue("Token", $"token=\"{token}\"");
             });
             services.AddSwaggerGen(c =>
             {

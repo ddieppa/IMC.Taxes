@@ -1,23 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.Net.Http;
 using System.Net.Http.Json;
-using System.Net.Mime;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using IMC.Taxes.Api.Models;
 using IMC.Taxes.Api.Serialization;
+using Microsoft.Extensions.Options;
 
 namespace IMC.Taxes.Api.Services
 {
     public class TaxJarService: ITaxService
     {
         private readonly HttpClient _httpClient;
+        private readonly TaxJarOptions _taxJarOptions;
 
-        public TaxJarService(HttpClient httpClient)
+        public TaxJarService(HttpClient httpClient, IOptions<TaxJarOptions> taxJarOptions)
         {
             _httpClient = httpClient;
+            _taxJarOptions = taxJarOptions.Value;
         }
         public async Task<Tax> GetTaxesByLocationAsync()
         {
@@ -26,7 +25,7 @@ namespace IMC.Taxes.Api.Services
 
         public async Task<Tax> GetOrderTaxesAsync(Order order)
         {
-            var uri = "https://api.taxjar.com/v2/taxes";
+            var uri = _taxJarOptions.Url;
 
             var options = new JsonSerializerOptions
             {
