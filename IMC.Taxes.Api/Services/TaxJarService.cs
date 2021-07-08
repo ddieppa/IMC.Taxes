@@ -4,10 +4,10 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Net.Mime;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using IMC.Taxes.Api.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using IMC.Taxes.Api.Serialization;
 
 namespace IMC.Taxes.Api.Services
 {
@@ -28,25 +28,17 @@ namespace IMC.Taxes.Api.Services
         {
             var uri = "https://api.taxjar.com/v2/taxes";
 
-            var settings = new JsonSerializerSettings
+            var options = new JsonSerializerOptions
             {
-                ContractResolver     = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() },
-                DefaultValueHandling = DefaultValueHandling.Include,
-                TypeNameHandling     = TypeNameHandling.None,
-                NullValueHandling    = NullValueHandling.Ignore,
-                Formatting           = Formatting.None,
-                ConstructorHandling  = ConstructorHandling.AllowNonPublicDefaultConstructor
+                PropertyNamingPolicy = new SnakeCaseNamingPolicy()
             };
-
-            var orderJson = JsonConvert.SerializeObject(order, settings);
-            var orderContent = new StringContent(orderJson, Encoding.UTF8, MediaTypeNames.Application.Json);
-            // _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
-            // _httpClient.DefaultRequestHeaders.Add("Authorization", "Token token=\"5da2f821eee4035db4771edab942a4cc\"");
-            var httpResponseMessage = await _httpClient.PostAsync(uri, orderContent);
+            
+            var httpResponseMessage = await _httpClient.PostAsJsonAsync(uri, order, options);
             httpResponseMessage.EnsureSuccessStatusCode();
-            var responseJson = await httpResponseMessage.Content.ReadAsStringAsync();
-            var taxResult = JsonConvert.DeserializeObject<Tax>(responseJson, settings);
-            return taxResult;
+            
+            var root = await httpResponseMessage.Content.ReadFromJsonAsync<TaxRoot>(options);
+            
+            return root?.Tax;
 
         }
     }
