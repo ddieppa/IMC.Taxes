@@ -57,8 +57,10 @@ namespace IMC.Taxes.Api.Controllers
 
         // POST: api/TaxCalculator
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<Tax> Post([FromBody] Order order)
         {
+            var result = await  _taxService.GetOrderTaxesAsync(order);
+            return result;
         }
 
         // PUT: api/TaxCalculator/5

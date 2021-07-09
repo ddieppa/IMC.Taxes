@@ -2,6 +2,7 @@ using System;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using IMC.Taxes.Api.Models;
+using IMC.Taxes.Api.Serialization;
 using IMC.Taxes.Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,7 +25,8 @@ namespace IMC.Taxes.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy());
 
             var taxJarSection = Configuration.GetSection(TaxJarOptions.TaxJar);
             services.Configure<TaxJarOptions>(taxJarSection);
