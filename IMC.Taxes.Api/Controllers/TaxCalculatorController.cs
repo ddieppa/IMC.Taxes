@@ -4,8 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using IMC.Taxes.Api.Models;
 using IMC.Taxes.Api.Services;
+using IMC.Taxes.Contracts.Responses;
+using IMC.Taxes.RefitInterfaces;
+using IMC.Taxes.RefitInterfaces.QueryParams;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Refit;
 
 namespace IMC.Taxes.Api.Controllers
 {
@@ -13,43 +17,54 @@ namespace IMC.Taxes.Api.Controllers
     [ApiController]
     public class TaxCalculatorController : ControllerBase
     {
-        private readonly ITaxService _taxService;
+        private readonly ITaxJarApi _taxJarApi;
 
-        public TaxCalculatorController(ITaxService taxService)
+        public TaxCalculatorController(ITaxJarApi taxJarApi)
         {
-            _taxService = taxService;
+            _taxJarApi = taxJarApi;
         }
         // GET: api/TaxCalculator
         [HttpGet]
-        public async Task<Tax> Get()
+        public async Task<RateResponse> Get()
         {
-            var orderLineItemList = new List<OrderLineItems>
+            // var orderLineItemList = new List<OrderLineItems>
+            // {
+            //     new OrderLineItems
+            //     {
+            //         Quantity = 1,
+            //         UnitPrice = 15.0,
+            //         ProductTaxCode = "31000"
+            //     }
+            // };
+            // var orderDto = new Order
+            // {
+            //     FromCountry = "US",
+            //     FromZip = "07001",
+            //     FromState = "NJ",
+            //     ToCountry = "US",
+            //     ToZip = "07446",
+            //     ToState = "NJ",
+            //     Amount = 16.50,
+            //     Shipping = 1.5,
+            //     LineItems = orderLineItemList.ToArray()
+            // };
+            // var result = await _taxService.GetOrderTaxesAsync(orderDto);
+            // return result;
+            
+            var queryParams = new RateQueryParam()
             {
-                new OrderLineItems
-                {
-                    Quantity = 1,
-                    UnitPrice = 15.0,
-                    ProductTaxCode = "31000"
-                }
+                Street = "312 Hurricane Lane",
+                City = "Williston",
+                State = "VT",
+                Country = "US"
             };
-            var orderDto = new Order
-            {
-                FromCountry = "US",
-                FromZip = "07001",
-                FromState = "NJ",
-                ToCountry = "US",
-                ToZip = "07446",
-                ToState = "NJ",
-                Amount = 16.50,
-                Shipping = 1.5,
-                LineItems = orderLineItemList.ToArray()
-            };
-            var result = await _taxService.GetOrderTaxesAsync(orderDto);
-            return result;
+            var response = await _taxJarApi.GetTaskRateForLocation("90404", queryParams);
+            
+            return response.RateResponse;
         }
 
         // GET: api/TaxCalculator/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{zip}", Name = "Get")]
         public string Get(int id)
         {
             return "value";
@@ -59,8 +74,9 @@ namespace IMC.Taxes.Api.Controllers
         [HttpPost]
         public async Task<Tax> Post([FromBody] Order order)
         {
-            var result = await  _taxService.GetOrderTaxesAsync(order);
-            return result;
+            // var result = await  _taxJarApi.GetOrderTaxesAsync(order);
+            // return result;
+            return null;
         }
 
         // PUT: api/TaxCalculator/5
