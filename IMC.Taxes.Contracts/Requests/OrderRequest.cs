@@ -30,7 +30,7 @@ namespace IMC.Taxes.Contracts.Requests
         public double Shipping { get; set; }
 
         [JsonPropertyName("line_items")]
-        public List<LineItemRequest> LineItems { get; } = new List<LineItemRequest>();
+        public List<LineItemRequest> LineItems { get; set; }
     }
 
 

@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using IMC.Taxes.Api.Models;
 using IMC.Taxes.Api.Serialization;
+using IMC.Taxes.RefitInterfaces.Options;
 using Microsoft.Extensions.Options;
 
 namespace IMC.Taxes.Api.Services

@@ -1,5 +1,6 @@
 ﻿
 using System.Threading.Tasks;
+using IMC.Taxes.Contracts.Requests;
 using IMC.Taxes.Contracts.Responses;
 using IMC.Taxes.RefitInterfaces.QueryParams;
 using Refit;
@@ -10,5 +11,8 @@ namespace IMC.Taxes.RefitInterfaces
     {
         [Get("/rates/{zip}")]
         Task<RateRootResponse> GetTaskRateForLocation(string zip, RateQueryParam queryParams);
+        
+        [Post("/taxes")]
+        Task<TaxRootResponse> GetSalesTaxForAnOrderAsync(OrderRequest order);
     }
 }

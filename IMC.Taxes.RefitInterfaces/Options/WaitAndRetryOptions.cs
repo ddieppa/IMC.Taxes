@@ -1,6 +1,6 @@
-﻿namespace IMC.Taxes.Api
+﻿namespace IMC.Taxes.RefitInterfaces.Options
 {
-    public class WaitAndRetryConfig
+    public class WaitAndRetryOptions
     {
         public int Retry { get; set; }
         public int Wait { get; set; }

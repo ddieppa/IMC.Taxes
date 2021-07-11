@@ -1,4 +1,4 @@
-﻿namespace IMC.Taxes.Api.Models
+﻿namespace IMC.Taxes.RefitInterfaces.Options
 {
     public class TaxJarOptions
     {

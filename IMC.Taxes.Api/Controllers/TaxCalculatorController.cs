@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IMC.Taxes.Api.Models;
 using IMC.Taxes.Api.Services;
+using IMC.Taxes.Contracts.Requests;
 using IMC.Taxes.Contracts.Responses;
 using IMC.Taxes.RefitInterfaces;
 using IMC.Taxes.RefitInterfaces.QueryParams;
@@ -72,11 +73,13 @@ namespace IMC.Taxes.Api.Controllers
 
         // POST: api/TaxCalculator
         [HttpPost]
-        public async Task<Tax> Post([FromBody] Order order)
+        public async Task<TaxResponse> Post([FromBody] OrderRequest order)
         {
             // var result = await  _taxJarApi.GetOrderTaxesAsync(order);
             // return result;
-            return null;
+
+            var result = await _taxJarApi.GetSalesTaxForAnOrderAsync(order);
+            return result.TaxResponse;
         }
 
         // PUT: api/TaxCalculator/5

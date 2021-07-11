@@ -2,14 +2,15 @@
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using IMC.Taxes.Api.Models;
+using IMC.Taxes.RefitInterfaces.Options;
 using Microsoft.Extensions.Options;
 
-namespace IMC.Taxes.Api.Refit
+namespace IMC.Taxes.RefitInterfaces.Handlers
 {
+    // Created this class to add the Header to the refit client
     public class AuthorizationMessageHandler : DelegatingHandler
     {
-        public readonly TaxJarOptions _taxJarOptions;
+        private readonly TaxJarOptions _taxJarOptions;
         
         public AuthorizationMessageHandler(IOptions<TaxJarOptions> taxJarOptions)
         {
@@ -18,7 +19,6 @@ namespace IMC.Taxes.Api.Refit
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancelToken)
         {
-            // request.Headers.Authorization = new AuthenticationHeaderValue("Token", $"token=\"5da2f821eee4035db4771edab942a4cc\"");
             request.Headers.Authorization = new AuthenticationHeaderValue("Token", $"token=\"{_taxJarOptions.Token}\"");
 
             return await base.SendAsync(request, cancelToken);
