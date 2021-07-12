@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using IMC.Taxes.Api.Models;
 using IMC.Taxes.Api.Services;
+using IMC.Taxes.Contracts;
 using IMC.Taxes.Contracts.QueryParams;
 using IMC.Taxes.Contracts.Requests;
 using IMC.Taxes.Contracts.Responses;
 using IMC.Taxes.RefitInterfaces;
 using IMC.Taxes.Services;
+using IMC.Taxes.Services.Factories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Refit;
@@ -19,11 +21,12 @@ namespace IMC.Taxes.Api.Controllers
     [ApiController]
     public class TaxCalculatorController : ControllerBase
     {
-        private readonly ITaxCalculatorProvider _taxCalculatorProvider;
+        
+        private readonly ITaxCalculatorProviderFactory _taxCalculatorProviderFactory;
 
-        public TaxCalculatorController(ITaxCalculatorProvider taxCalculatorService)
+        public TaxCalculatorController(ITaxCalculatorProviderFactory taxCalculatorProviderFactory)
         {
-            _taxCalculatorProvider = taxCalculatorService;
+            _taxCalculatorProviderFactory = taxCalculatorProviderFactory;
         }
         // GET: api/TaxCalculator
         [HttpGet]
@@ -36,7 +39,10 @@ namespace IMC.Taxes.Api.Controllers
                 State = "VT",
                 Country = "US"
             };
-            var response = await _taxCalculatorProvider.GetTaskRateForLocation("90404", queryParams);
+
+            var taxCalculatorProvider = _taxCalculatorProviderFactory.CreateTaxCalculatorProvider(Constants.TaxCalculatorProviderNames.TaxJar);
+            
+            var response = await taxCalculatorProvider.GetTaskRateForLocation("90404", queryParams);
             
             return response.RateResponse;
         }
@@ -54,8 +60,8 @@ namespace IMC.Taxes.Api.Controllers
         {
             // var result = await  _taxJarApi.GetOrderTaxesAsync(order);
             // return result;
-
-            var result = await _taxCalculatorProvider.GetSalesTaxForAnOrderAsync(order);
+            var taxCalculatorProvider = _taxCalculatorProviderFactory.CreateTaxCalculatorProvider(Constants.TaxCalculatorProviderNames.TaxJar);
+            var result = await taxCalculatorProvider.GetSalesTaxForAnOrderAsync(order);
             return result.TaxResponse;
         }
 
