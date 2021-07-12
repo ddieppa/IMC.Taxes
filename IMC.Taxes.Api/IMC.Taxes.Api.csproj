@@ -14,10 +14,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\IMC.Taxes.RefitInterfaces\IMC.Taxes.RefitInterfaces.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Refit" />
+      <ProjectReference Include="..\IMC.Taxes.Services\IMC.Taxes.Services.csproj" />
     </ItemGroup>
 
 </Project>

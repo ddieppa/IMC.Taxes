@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\IMC.Taxes.Contracts\IMC.Taxes.Contracts.csproj" />
+      <ProjectReference Include="..\IMC.Taxes.RefitInterfaces\IMC.Taxes.RefitInterfaces.csproj" />
+    </ItemGroup>
+
+</Project>

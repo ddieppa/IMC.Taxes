@@ -26,7 +26,7 @@ namespace IMC.Taxes.RefitInterfaces
 
             // Added this way cuz is only used here in the configuration
             var waitAnRetryConfig = new WaitAndRetryOptions();
-            configuration.GetSection(nameof(WaitAndRetryOptions)).Bind(waitAnRetryConfig);
+            configuration.GetSection(WaitAndRetryOptions.WaitAndRetry).Bind(waitAnRetryConfig);
             
             // Add some Polly retry policies
             var retryPolicy = HttpPolicyExtensions

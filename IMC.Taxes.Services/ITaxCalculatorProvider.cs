@@ -1,18 +1,13 @@
-﻿
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using IMC.Taxes.Contracts.QueryParams;
 using IMC.Taxes.Contracts.Requests;
 using IMC.Taxes.Contracts.Responses;
-using Refit;
 
-namespace IMC.Taxes.RefitInterfaces
+namespace IMC.Taxes.Services
 {
-    public interface ITaxJarApi
+    public interface ITaxCalculatorProvider
     {
-        [Get("/rates/{zip}")]
         Task<RateRootResponse> GetTaskRateForLocation(string zip, RateQueryParam queryParams);
-        
-        [Post("/taxes")]
         Task<TaxRootResponse> GetSalesTaxForAnOrderAsync(OrderRequest order);
     }
 }

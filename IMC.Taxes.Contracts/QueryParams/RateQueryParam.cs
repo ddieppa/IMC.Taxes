@@ -1,4 +1,4 @@
-﻿namespace IMC.Taxes.RefitInterfaces.QueryParams
+﻿namespace IMC.Taxes.Contracts.QueryParams
 {
     public class RateQueryParam
     {

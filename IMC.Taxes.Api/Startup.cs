@@ -1,4 +1,5 @@
 using IMC.Taxes.RefitInterfaces;
+using IMC.Taxes.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,7 +24,8 @@ namespace IMC.Taxes.Api
         {
             services.AddControllers();
             
-            services.AddRefitServices(Configuration); 
+            services.AddRefitServices(Configuration);
+            services.AddTaxCalculatorServices();
 
             services.AddSwaggerGen(c =>
             {
