@@ -5,7 +5,7 @@ using IMC.Taxes.Contracts.Responses;
 
 namespace IMC.Taxes.Services
 {
-    public interface ITaxCalculatorProvider
+    public interface ITaxCalculatorProviderService
     {
         Task<RateRootResponse> GetTaskRateForLocation(string zip, RateQueryParam queryParams);
         Task<TaxRootResponse> GetSalesTaxForAnOrderAsync(OrderRequest order);

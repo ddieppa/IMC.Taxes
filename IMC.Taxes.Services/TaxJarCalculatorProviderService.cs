@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FluentValidation;
 using IMC.Taxes.Contracts.QueryParams;
 using IMC.Taxes.Contracts.Requests;
 using IMC.Taxes.Contracts.Responses;
@@ -9,13 +10,15 @@ using Refit;
 
 namespace IMC.Taxes.Services
 {
-    class TaxJarCalculatorProvider : ITaxCalculatorProvider
+    public class TaxJarCalculatorProviderService : ITaxCalculatorProviderService
     {
         private readonly ITaxJarApi _taxJarApi;
+        private readonly IValidator<OrderRequest> _validator;
 
-        public TaxJarCalculatorProvider(ITaxJarApi taxJarApi)
+        public TaxJarCalculatorProviderService(ITaxJarApi taxJarApi, IValidator<OrderRequest> validator)
         {
             _taxJarApi = taxJarApi;
+            _validator = validator;
         }
 
         public async Task<RateRootResponse> GetTaskRateForLocation(string zip, RateQueryParam queryParams)
@@ -40,6 +43,7 @@ namespace IMC.Taxes.Services
         {
             try
             {
+                var validationResult = await _validator.ValidateAsync(order);
                 return await _taxJarApi.GetSalesTaxForAnOrderAsync(order);
             }
             catch (ApiException ex)
