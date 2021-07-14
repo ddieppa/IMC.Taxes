@@ -18,3 +18,13 @@ The Tax Service will also have these methods and simply call the Tax Calculator.
 Unit Tests on the Tax Jar calculator and Tax Service should be included in your solution.
 Please let us know if you have any questions at all.  
 When you are finished just push your code to GitHub or BitBucket and send us the link.
+
+
+## Used Packages
+
+[Fluent Assertions](https://fluentassertions.com/)
+[Fluent Validations](https://fluentvalidation.net/)
+[Refit](https://github.com/reactiveui/refit)
+[AutoFixture](https://github.com/AutoFixture/AutoFixture)
+[NSubstitute](https://nsubstitute.github.io/help/getting-started/)
+[XUnit](https://xunit.net/)
