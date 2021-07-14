@@ -23,8 +23,13 @@ When you are finished just push your code to GitHub or BitBucket and send us the
 ## Used Packages
 
 [Fluent Assertions](https://fluentassertions.com/)
+
 [Fluent Validations](https://fluentvalidation.net/)
+
 [Refit](https://github.com/reactiveui/refit)
+
 [AutoFixture](https://github.com/AutoFixture/AutoFixture)
+
 [NSubstitute](https://nsubstitute.github.io/help/getting-started/)
+
 [XUnit](https://xunit.net/)
