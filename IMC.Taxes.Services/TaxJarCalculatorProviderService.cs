@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using IMC.Taxes.Contracts.QueryParams;
@@ -25,7 +26,16 @@ namespace IMC.Taxes.Services
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(zip))
+                {
+                    throw new ArgumentException("Have to enter a ZipCode");
+                }
+
                 return await _taxJarApi.GetTaskRateForLocation(zip, queryParams);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new TaxCalculatorException(ex.Message);
             }
             catch (ApiException ex)
             {
@@ -43,8 +53,13 @@ namespace IMC.Taxes.Services
         {
             try
             {
-                var validationResult = await _validator.ValidateAsync(order);
+                await _validator.ValidateAndThrowAsync(order);
                 return await _taxJarApi.GetSalesTaxForAnOrderAsync(order);
+            }
+            catch (ValidationException ex)
+            {
+                var errorMessages = string.Join(",", ex.Errors.Select(x => x.ErrorMessage));
+                throw new TaxCalculatorException(errorMessages, ex);
             }
             catch (ApiException ex)
             {

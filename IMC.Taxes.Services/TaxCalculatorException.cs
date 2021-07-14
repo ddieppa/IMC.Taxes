@@ -21,5 +21,9 @@ namespace IMC.Taxes.Services
         public TaxCalculatorException(string? message, Exception? innerException) : base(message, innerException)
         {
         }
+
+        public TaxCalculatorException()
+        {
+        }
     }
 }
